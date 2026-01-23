@@ -1,0 +1,13 @@
+{
+	"Group": "com.henningstorck",
+	"Name": "Hypush",
+	"Version": "0.1.0-SNAPSHOT",
+	"Authors": [
+		{
+			"Name": "Henning Storck",
+			"Email": "mail@henningstorck.com"
+		}
+	],
+	"Main": "com.henningstorck.hypush.HypushPlugin",
+	"ServerVersion": "*"
+}
