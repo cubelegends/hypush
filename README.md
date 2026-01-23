@@ -5,6 +5,8 @@ like [Uptime Kuma](https://uptimekuma.org/) or [Healthchecks](https://healthchec
 perform requests against a configurable endpoint, usually provided by your health check tool. If there are no requests
 made for some time, your health check tool knows that something is wrong.
 
+![Screenshot](screenshot.png)
+
 ## Setup
 
 1. Copy the plugin into the `mods` directory of your server
