@@ -8,6 +8,10 @@ import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Level;
@@ -22,6 +26,19 @@ public class HypushPlugin extends JavaPlugin {
 	@Override
 	protected void setup() {
 		initConfig();
+	}
+
+	@Override
+	protected void start() {
+		if (pluginConfig.get().getUrl().isEmpty()) {
+			getLogger().at(Level.WARNING).log("Set a push URL first.");
+			return;
+		}
+
+		getLogger().at(Level.INFO).log("Starting pushing to %s every %d seconds.",
+			pluginConfig.get().getUrl(), pluginConfig.get().getInterval());
+
+		loop();
 	}
 
 	private void initConfig() {
@@ -43,6 +60,30 @@ public class HypushPlugin extends JavaPlugin {
 			}
 		} catch (IOException e) {
 			getLogger().at(Level.WARNING).log("Cannot initialize config file.");
+		}
+	}
+
+	private void loop() {
+		new Thread(() -> {
+			try {
+				while (true) {
+					push();
+					Thread.sleep(1000L * pluginConfig.get().getInterval());
+				}
+			} catch (InterruptedException e) {
+				// Do nothing
+			}
+		}).start();
+	}
+
+	private void push() {
+		URI uri = URI.create(pluginConfig.get().getUrl());
+		HttpRequest httpRequest = HttpRequest.newBuilder(uri).GET().build();
+
+		try (HttpClient httpClient = HttpClient.newBuilder().build()) {
+			httpClient.send(httpRequest, HttpResponse.BodyHandlers.discarding());
+		} catch (IOException | InterruptedException e) {
+			getLogger().at(Level.WARNING).log("Failed to push.");
 		}
 	}
 }
