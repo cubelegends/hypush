@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>com.hypixel.hytale</groupId>
 			<artifactId>Server</artifactId>
-			<version>2026.04.09-7243e82f8</version>
+			<version>2026.04.16-5cbd1e160</version>
 		</dependency>
 	</dependencies>
 </project>
